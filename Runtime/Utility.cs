@@ -11,6 +11,7 @@ using Doxel.Utility.ExtensionMethods;
 namespace Doxel.Utility {
 	
 	public static class Utility {
+		// tes comm
 
 		public static void Swap<T> (ref T value1, ref T value2) {
 			T tempValue = value1;
