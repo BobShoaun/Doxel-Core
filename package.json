@@ -1,6 +1,6 @@
 {
   "name": "com.doxel.core",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "displayName": "Doxel Core",
   "description": "Useful core features and utilities that boosts development productivity, and provides good code structure.",
   "unity": "2019.3",

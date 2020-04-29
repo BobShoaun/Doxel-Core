@@ -1,13 +1,10 @@
 ﻿
-public abstract class Singleton<T> where T : Singleton<T>, new()
-{
+public abstract class Singleton<T> where T : Singleton<T>, new () {
 
-    private static T instance;
+	private static T instance;
 
-    public static T Instance {
-        get {
-            return instance == null ? instance = new T() : instance;
-        }
-    }
+	public static T Instance {
+		get => instance ?? (instance = new T ());
+	}
 
 }

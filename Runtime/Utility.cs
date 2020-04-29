@@ -4,14 +4,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityObject = UnityEngine.Object;
 using Doxel.Utility.ExtensionMethods;
 
 namespace Doxel.Utility {
-	
+
 	public static class Utility {
-		// tes comm
 
 		public static void Swap<T> (ref T value1, ref T value2) {
 			T tempValue = value1;
@@ -74,7 +72,7 @@ namespace Doxel.Utility {
 			result (target);
 			callback.Raise ();
 		}
-			
+
 	}
 
 }

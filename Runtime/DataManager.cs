@@ -10,7 +10,7 @@ using UnityEngine;
 using Doxel.Utility;
 
 public class DataManager : Singleton<DataManager> {
-	
+
 	private readonly string dataPath;
 	private readonly string jsonDataPath;
 	private readonly string xmlDataPath;
@@ -29,9 +29,9 @@ public class DataManager : Singleton<DataManager> {
 		binaryFormatter = new BinaryFormatter { SurrogateSelector = surrogateSelector };
 	}
 
-	public void Save<T> (string dataKey, T dataToSave) {		
+	public void Save<T> (string dataKey, T dataToSave) {
 		if (dataDictionary.ContainsKey (dataKey))
-			dataDictionary [dataKey] = dataToSave;
+			dataDictionary[dataKey] = dataToSave;
 		else
 			dataDictionary.Add (dataKey, dataToSave);
 	}
@@ -55,12 +55,9 @@ public class DataManager : Singleton<DataManager> {
 	}
 
 	public void SaveAll () {
-		if (clear)
-			clear = true;
-		else {
+		if (!clear)
 			foreach (var saveLoad in Utility.FindObjectsOfNonUnityType<ISaveLoad> ())
 				saveLoad.SaveData (this);
-		}
 	}
 
 	public void LoadAll () {
@@ -86,13 +83,10 @@ public class DataManager : Singleton<DataManager> {
 		return true;
 	}
 
-	public void DeleteFile () {
-		File.Delete (dataPath);
-	}
+	public void DeleteFile () => File.Delete (dataPath);
 
-	public void SaveToJson<T> (string jsonFileName, T dataToSave, bool format = false) {
+	public void SaveToJson<T> (string jsonFileName, T dataToSave, bool format = false) =>
 		File.WriteAllText (string.Format (jsonDataPath, jsonFileName), JsonUtility.ToJson (dataToSave, format));
-	}
 
 	public bool LoadFromJson<T> (string jsonFileName, ref T dataToLoad) {
 		var jsonFilePath = string.Format (jsonDataPath, jsonFileName);
@@ -109,9 +103,9 @@ public class DataManager : Singleton<DataManager> {
 		return default (T);
 	}
 
-	public void DeleteJson (string jsonFileName) {
+	public void DeleteJson (string jsonFileName) =>
 		File.Delete (string.Format (jsonDataPath, jsonFileName));
-	}
+
 
 	public void SaveToXml<T> (string xmlFileName, T dataToSave) {
 		var xmlSerializer = new XmlSerializer (typeof (T));
@@ -138,14 +132,13 @@ public class DataManager : Singleton<DataManager> {
 			return (T) xmlSerializer.Deserialize (fileStream);
 	}
 
-	public void DeleteXml (string xmlFileName) {
+	public void DeleteXml (string xmlFileName) =>
 		File.Delete (string.Format (xmlDataPath, xmlFileName));
-	}
-		
+
 }
 
 [Serializable]
-public class DataTable<TKey,TValue> {
+public class DataTable<TKey, TValue> {
 
 	private List<TKey> keys;
 	private List<TValue> values;
@@ -155,13 +148,9 @@ public class DataTable<TKey,TValue> {
 		values = new List<TValue> ();
 	}
 
-	public TValue this [TKey key] {
-		get {
-			return GetValue (key);
-		}
-		set {
-			SetValue (key, value);
-		}
+	public TValue this[TKey key] {
+		get => GetValue (key);
+		set => SetValue (key, value);
 	}
 
 	public void Add (TKey key, TValue value) {
@@ -174,28 +163,25 @@ public class DataTable<TKey,TValue> {
 		values.Clear ();
 	}
 
-	public bool ContainsKey (TKey key) {
-		return GetIndex (key) > -1;
-	}
+	public bool ContainsKey (TKey key) => GetIndex (key) > -1;
 
 	private TValue GetValue (TKey key) {
 		int index = GetIndex (key);
 		if (index > -1)
-			return values [index];
+			return values[index];
 		throw new KeyNotFoundException (key.ToString ());
 	}
 
 	private void SetValue (TKey key, TValue valueToSet) {
 		int index = GetIndex (key);
 		if (index > -1)
-			values [index] = valueToSet;
+			values[index] = valueToSet;
 		else
 			throw new KeyNotFoundException (key.ToString ());
 	}
 
-	private int GetIndex (TKey key) {
-		return keys.FindIndex (i => EqualityComparer<TKey>.Default.Equals (i, key));
-	}
+	private int GetIndex (TKey key) =>
+		keys.FindIndex (i => EqualityComparer<TKey>.Default.Equals (i, key));
 
 }
 
@@ -208,9 +194,8 @@ public struct Vector2Surrogate : ISerializationSurrogate {
 		info.AddValue ("Y", vector2.y);
 	}
 
-	public object SetObjectData (object obj, SerializationInfo info, StreamingContext context, ISurrogateSelector selector) {
-		return new Vector2 (info.GetSingle ("X"), info.GetSingle ("Y"));
-	}
+	public object SetObjectData (object obj, SerializationInfo info, StreamingContext context, ISurrogateSelector selector) =>
+		new Vector2 (info.GetSingle ("X"), info.GetSingle ("Y"));
 
 }
 
@@ -224,8 +209,7 @@ public struct Vector3Surrogate : ISerializationSurrogate {
 		info.AddValue ("Z", vector3.z);
 	}
 
-	public object SetObjectData (object obj, SerializationInfo info, StreamingContext context, ISurrogateSelector selector) {
-		return new Vector3 (info.GetSingle ("X"), info.GetSingle ("Y"), info.GetSingle ("Z"));
-	}
-	
+	public object SetObjectData (object obj, SerializationInfo info, StreamingContext context, ISurrogateSelector selector) =>
+		new Vector3 (info.GetSingle ("X"), info.GetSingle ("Y"), info.GetSingle ("Z"));
+
 }

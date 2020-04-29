@@ -4,25 +4,23 @@ public abstract class Database<TElement, TInstance> : SemiSingletonMonoBehaviour
 
 	public TElement[] Elements;
 
-	public TElement this [int id] {
+	public TElement this[int id] {
 		get {
-			foreach (var element in Elements) {
+			foreach (var element in Elements)
 				if (element.Id == id)
 					return element;
-			}
 			Debug.LogError ("Element with given id does not exist: " + id);
-			return default (TElement);
+			return default;
 		}
 	}
 
-	public TElement this [string title] {
-		get { 
-			foreach (var element in Elements) {
+	public TElement this[string title] {
+		get {
+			foreach (var element in Elements)
 				if (element.Title == title)
 					return element;
-			}
 			Debug.LogError ("Element with given title does not exist: " + title);
-			return default (TElement);
+			return default;
 		}
 	}
 
