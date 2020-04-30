@@ -11,6 +11,11 @@ namespace Doxel.Utility {
 
 	public static class Utility {
 
+		public static Color translucent = new Color (1, 1, 1, 0.5f);
+
+		public static int Remainder (int dividend, int divisor) =>
+			(dividend % divisor + divisor) % divisor;
+
 		public static void Swap<T> (ref T value1, ref T value2) {
 			T tempValue = value1;
 			value1 = value2;
@@ -71,6 +76,46 @@ namespace Doxel.Utility {
 			}
 			result (target);
 			callback.Raise ();
+		}
+
+		public static IEnumerator Transition (Action<Vector2> result, float duration, Vector2 initial, Vector2 target, Action callback = null) {
+			for (float percent = 0; percent <= 1; percent += Time.unscaledDeltaTime / duration) {
+				result (Vector2.Lerp (initial, target, percent));
+				yield return null;
+			}
+			result (target);
+			callback?.Invoke ();
+		}
+
+		public static float ExponentialDecayTowards (float currentValue, float targetValue, float timeToGetHalfway, float deltaTime) {
+			if (timeToGetHalfway < 0f || Mathf.Approximately (timeToGetHalfway, 0f))
+				return targetValue;
+			return (targetValue - currentValue) * (1f - Mathf.Exp (-deltaTime / timeToGetHalfway)) + currentValue;
+		}
+
+		public static Vector3 ExponentialDecayTowards (Vector3 currentValue, Vector3 targetValue, float timeToGetHalfway, float deltaTime) {
+			if (timeToGetHalfway < 0f || Mathf.Approximately (timeToGetHalfway, 0f))
+				return targetValue;
+			return Vector3.Lerp (currentValue, targetValue, 1f - Mathf.Exp (-deltaTime / timeToGetHalfway));
+		}
+
+		public static Quaternion ExponentialDecayTowards (Quaternion currentValue, Quaternion targetValue, float timeToGetHalfway, float deltaTime) {
+			if (timeToGetHalfway < 0f || Mathf.Approximately (timeToGetHalfway, 0f))
+				return targetValue;
+			return Quaternion.Slerp (currentValue, targetValue, 1f - Mathf.Exp (-deltaTime / timeToGetHalfway));
+		}
+
+		public static float LogarithmicDecayTowards (float currentValue, float targetValue, float timeToGetHalfway, float deltaTime) {
+			if (timeToGetHalfway < 0f || Mathf.Approximately (timeToGetHalfway, 0f))
+				return targetValue;
+			return (targetValue - currentValue) * (1f - Mathf.Exp (-deltaTime / timeToGetHalfway)) + currentValue;
+		}
+
+		public static float Decay (float currentValue, float targetValue, float timeToGetHalfway, float deltaTime) {
+			if (timeToGetHalfway < 0f || Mathf.Approximately (timeToGetHalfway, 0f))
+				return targetValue;
+			//return (targetValue - currentValue) * (1 - Mathf.Exp (-deltaTime / timeToGetHalfway)) + currentValue;
+			return Mathf.Sign (targetValue - currentValue) * (1 - Mathf.Exp (deltaTime / timeToGetHalfway)) + currentValue;
 		}
 
 	}

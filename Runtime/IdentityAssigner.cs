@@ -10,6 +10,6 @@
 public interface IIdentifiable {
 
 	int Id { get; set; }
-	string Title { get; }
+	string Name { get; }
 
 }
